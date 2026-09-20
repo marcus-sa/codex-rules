@@ -190,3 +190,23 @@ describe("rule engine dynamic matching", () => {
 		expect(matchCalls).toBe(2);
 	});
 });
+
+describe("rule engine static matching", () => {
+	it("#given a rule without frontmatter #when loading static rules #then it always applies", () => {
+		// given
+		const candidate = makeCandidate();
+		const deps = {
+			findProjectRoot: () => projectRoot,
+			findCandidates: () => [candidate],
+			readFile: () => "Prefer strict TypeScript.",
+		} satisfies EngineDeps;
+		const engine = createEngine(defaultConfig(), deps);
+
+		// when
+		const result = engine.loadStaticRules(projectRoot);
+
+		// then
+		expect(result.rules).toHaveLength(1);
+		expect(result.rules[0]?.matchReason).toBe("alwaysApply");
+	});
+});

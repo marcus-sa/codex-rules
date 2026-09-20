@@ -17,7 +17,7 @@ import {
 } from "./constants.js";
 import { createRuleDiscoveryCache, type RuleDiscoveryCache } from "./finder.js";
 import { formatDynamicBlock, formatStaticBlock } from "./formatter.js";
-import { hashContent, matchRule } from "./matcher.js";
+import { hashContent, matchRule, normalizeGlobs } from "./matcher.js";
 import { sortCandidates } from "./ordering.js";
 import { parseRule } from "./parser.js";
 import type { LoadedRule, MatchReason, PiRulesConfig, RuleCandidate, RuleDiagnostic, SessionState } from "./types.js";
@@ -433,6 +433,10 @@ function staticMatchReason(rule: LoadedRule): MatchReason | null {
 
 	if (rule.isSingleFile) {
 		return "single-file";
+	}
+
+	if (rule.frontmatter.alwaysApply !== false && normalizeGlobs(rule.frontmatter).length === 0) {
+		return "alwaysApply";
 	}
 
 	return null;

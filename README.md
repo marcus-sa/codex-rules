@@ -40,6 +40,9 @@ alwaysApply: false
 Prefer strict TypeScript and keep runtime imports ESM-compatible.
 ```
 
+Frontmatter is optional. A rule without frontmatter applies to every target. Set
+`alwaysApply: false` when a rule has no path pattern and must not apply.
+
 ## Install Locally
 
 From the marketplace workspace:

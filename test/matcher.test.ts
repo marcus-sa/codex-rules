@@ -55,9 +55,20 @@ describe("matchRule", () => {
 		expect(result).toEqual({ matched: true, reason: "alwaysApply" });
 	});
 
-	it("#given rule without patterns #when target is checked #then no match is returned", () => {
+	it("#given rule without frontmatter #when target is checked #then it always matches", () => {
 		// given
 		const frontmatter = {} satisfies RuleFrontmatter;
+
+		// when
+		const result = matchFrontmatter(frontmatter, { projectRelative: "src/app.ts" });
+
+		// then
+		expect(result).toEqual({ matched: true, reason: "alwaysApply" });
+	});
+
+	it("#given explicit always apply false without patterns #when target is checked #then no match is returned", () => {
+		// given
+		const frontmatter = { alwaysApply: false } satisfies RuleFrontmatter;
 
 		// when
 		const result = matchFrontmatter(frontmatter, { projectRelative: "src/app.ts" });

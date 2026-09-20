@@ -9,6 +9,9 @@ export function matchRule(input) {
         return { matched: true, reason: "alwaysApply" };
     }
     const patterns = normalizeGlobs(input.frontmatter);
+    if (patterns.length === 0 && input.frontmatter.alwaysApply !== false) {
+        return { matched: true, reason: "alwaysApply" };
+    }
     if (patterns.length === 0) {
         return noMatch();
     }

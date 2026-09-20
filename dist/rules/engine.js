@@ -4,7 +4,7 @@ import { clearSession, createSessionState, isDynamicInjected as isDynamicInjecte
 import { DEFAULT_MAX_RESULT_CHARS, DEFAULT_MAX_RULE_CHARS, PROJECT_SINGLE_FILES, SOURCE_PRIORITY, } from "./constants.js";
 import { createRuleDiscoveryCache } from "./finder.js";
 import { formatDynamicBlock, formatStaticBlock } from "./formatter.js";
-import { hashContent, matchRule } from "./matcher.js";
+import { hashContent, matchRule, normalizeGlobs } from "./matcher.js";
 import { sortCandidates } from "./ordering.js";
 import { parseRule } from "./parser.js";
 const MAX_DYNAMIC_MATCH_CACHE_ENTRIES = 4096;
@@ -279,6 +279,9 @@ function staticMatchReason(rule) {
     }
     if (rule.isSingleFile) {
         return "single-file";
+    }
+    if (rule.frontmatter.alwaysApply !== false && normalizeGlobs(rule.frontmatter).length === 0) {
+        return "alwaysApply";
     }
     return null;
 }

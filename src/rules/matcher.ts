@@ -36,6 +36,10 @@ export function matchRule(input: MatcherInput): MatchResult {
 	}
 
 	const patterns = normalizeGlobs(input.frontmatter);
+	if (patterns.length === 0 && input.frontmatter.alwaysApply !== false) {
+		return { matched: true, reason: "alwaysApply" };
+	}
+
 	if (patterns.length === 0) {
 		return noMatch();
 	}
